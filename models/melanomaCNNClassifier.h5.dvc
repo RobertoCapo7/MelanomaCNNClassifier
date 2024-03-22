@@ -1,0 +1,5 @@
+outs:
+- md5: 022b5ac8634a5e2ca6037d04a450edd8
+  size: 33384328
+  hash: md5
+  path: melanomaCNNClassifier.h5
