@@ -37,3 +37,5 @@ Addestramento di una CNN per distinguere i nevi benigni dai maligni
 ├── requirements.txt   <- Txt file containing all requirements to install in venv.
 ├── setup.sh           <- Allows you to configure git and DVC.
 ```
+# Use
+![streamLit](img/streamLit.png)
