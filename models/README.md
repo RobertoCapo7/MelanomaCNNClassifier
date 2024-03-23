@@ -3,11 +3,11 @@
 # Doc / guide: https://huggingface.co/docs/hub/model-cards
 ---
 
-# Model Card for Model ID
+# Model Card for MelanomaCNNClassifier
 
 <!-- Provide a quick summary of what the model is/does. -->
 
-
+Questo modello è una Convolutional Neural Network (CNN) appositamente addestrata per la classificazione di nuove immagini di nevi cutanei come maligni o benigni. Analizzando attentamente le caratteristiche dell'immagine, il modello fornisce una valutazione precisa del rischio associato al neo.
 
 ## Model Details
 
@@ -18,20 +18,16 @@
 
 
 - **Developed by:** RobertoCapo7
-- **Funded by [optional]:** [More Information Needed]
-- **Shared by [optional]:** [More Information Needed]
-- **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
-- **License:** [More Information Needed]
-- **Finetuned from model [optional]:** [More Information Needed]
+- **Model type:** Convolutional Neural Network
+- **License:** No
+
 
 ### Model Sources [optional]
 
 <!-- Provide the basic links for the model. -->
 
 - **Repository:** https://github.com/RobertoCapo7/MelanomaCNNClassifier
-- **Paper [optional]:** [More Information Needed]
-- **Demo [optional]:** [More Information Needed]
+
 
 ## Uses
 
@@ -41,64 +37,29 @@
 
 <!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
 
-[More Information Needed]
-
-### Downstream Use [optional]
-
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
-
-[More Information Needed]
-
-### Out-of-Scope Use
-
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
-
-[More Information Needed]
-
-## Bias, Risks, and Limitations
-
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
-
-[More Information Needed]
-
-### Recommendations
-
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
-
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
-
-## How to Get Started with the Model
-
-Use the code below to get started with the model.
-
-[More Information Needed]
+Per poter utilizzare il modello avviare il server attraverso lo script 'serverStreamLit.py', copiare il comando che da in output nel terminale e lanciarlo. Si avvierà il browser, scegli la tua immagine da classificare.
 
 ## Training Details
 
 ### Training Data
 
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
-
-[More Information Needed]
+Il dataset di immagini è stato scaricato da Kaggle dal seguente link: https://www.kaggle.com/datasets/bhaveshmittal/melanoma-cancer-dataset?select=train
 
 ### Training Procedure
 
 <!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
 
-#### Preprocessing [optional]
+#### Preprocessing
 
-[More Information Needed]
+Le immagini sono state pre-processate:
+- Eliminate le immagini con estensione non supportata da OpenCV
+- Le immagini sono state portate alla stessa risoluzione: 224 x 224 
+- Equalizzazione dell’istogramma, massimizzando il contrasto delle immagini
 
 
 #### Training Hyperparameters
+![architetturaCNN](../img/architettura.png)
 
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
-
-#### Speeds, Sizes, Times [optional]
-
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
-
-[More Information Needed]
 
 ## Evaluation
 
@@ -110,90 +71,24 @@ Use the code below to get started with the model.
 
 <!-- This should link to a Dataset Card if possible. -->
 
-[More Information Needed]
-
-#### Factors
-
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
-
-[More Information Needed]
+Attraverso lo script 'testCNN.py' è possibile testare il modello con le immagini di test
 
 #### Metrics
 
 <!-- These are the evaluation metrics being used, ideally with a description of why. -->
-
-[More Information Needed]
+- Precision
+- Recall
+- ROC
+- Matrice di confusione
+- Accuracy
 
 ### Results
+![Metriche](../img/Metriche.png)
+![Accuracy](../img/Accuracy.png)
+![Loss](../img/Loss.png)
+![MatriceDiConfusione](../img/ConfusionMatrix.png)
+![ROC](../img/ROC.png)
 
-[More Information Needed]
-
-#### Summary
 
 
 
-## Model Examination [optional]
-
-<!-- Relevant interpretability work for the model goes here -->
-
-[More Information Needed]
-
-## Environmental Impact
-
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
-
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
-
-- **Hardware Type:** [More Information Needed]
-- **Hours used:** [More Information Needed]
-- **Cloud Provider:** [More Information Needed]
-- **Compute Region:** [More Information Needed]
-- **Carbon Emitted:** [More Information Needed]
-
-## Technical Specifications [optional]
-
-### Model Architecture and Objective
-
-[More Information Needed]
-
-### Compute Infrastructure
-
-[More Information Needed]
-
-#### Hardware
-
-[More Information Needed]
-
-#### Software
-
-[More Information Needed]
-
-## Citation [optional]
-
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
-
-**BibTeX:**
-
-[More Information Needed]
-
-**APA:**
-
-[More Information Needed]
-
-## Glossary [optional]
-
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
-
-[More Information Needed]
-
-## More Information [optional]
-
-[More Information Needed]
-
-## Model Card Authors [optional]
-
-RobertoCapo7
-
-## Model Card Contact
-
-roberto.capolongo@live.it
