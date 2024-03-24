@@ -8,6 +8,7 @@ path_test_benign = "../../data/processed/test/Benign"
 path_test_malignant = "../../data/processed/test/Malignant"
 batch_img_size = 224
 
+
 def histogram_equalization(img_in):
     # segregate color streams
     b, g, r = cv2.split(img_in)

@@ -1,16 +1,21 @@
-import os
 import mlflow
 from codecarbon import OfflineEmissionsTracker
 from matplotlib import pyplot as plt
 import tensorflow as tf
-from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc, ConfusionMatrixDisplay
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    roc_curve,
+    auc,
+    ConfusionMatrixDisplay,
+)
 from sklearn.model_selection import KFold
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
 from tensorflow.keras.metrics import Precision, Recall, BinaryAccuracy
 import numpy as np
 
-gpus = tf.config.experimental.list_physical_devices('GPU')
+gpus = tf.config.experimental.list_physical_devices("GPU")
 for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
@@ -62,7 +67,9 @@ for fold, (train_indices, val_indices) in enumerate(kfold.split(X, y)):
     X_train, X_val = X[train_indices], X[val_indices]
     y_train, y_val = y[train_indices], y[val_indices]
 
-    train = tf.data.Dataset.from_tensor_slices((X_train, y_train)).batch(batch_size_value)
+    train = tf.data.Dataset.from_tensor_slices((X_train, y_train)).batch(
+        batch_size_value
+    )
     val = tf.data.Dataset.from_tensor_slices((X_val, y_val)).batch(batch_size_value)
 
     with mlflow.start_run() as run:
@@ -95,15 +102,18 @@ for fold, (train_indices, val_indices) in enumerate(kfold.split(X, y)):
         # Add model checkpoint callback to save the best model
         model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=f"best_model_fold_{fold+1}.keras",
-            monitor='val_accuracy',
-            mode='max',
+            monitor="val_accuracy",
+            mode="max",
             save_best_only=True,
             save_weights_only=False,
-            verbose=1
+            verbose=1,
         )
 
         hist = model.fit(
-            train, epochs=10, validation_data=val, callbacks=[tensorboard_callback, model_checkpoint_callback]
+            train,
+            epochs=10,
+            validation_data=val,
+            callbacks=[tensorboard_callback, model_checkpoint_callback],
         )
 
         # Load the best model and evaluate on validation set
@@ -145,29 +155,37 @@ for fold, (train_indices, val_indices) in enumerate(kfold.split(X, y)):
 
         y_pred_binary = [1 if pred >= 0.5 else 0 for pred in y_pred]
 
-        print(f"Precision_fold_{fold+1}: ", classification_report(y_true, y_pred_binary))
+        print(
+            f"Precision_fold_{fold+1}: ", classification_report(y_true, y_pred_binary)
+        )
 
         # Confusion Matrix
         cm = confusion_matrix(y_true, np.round(y_pred))
         cm_display = ConfusionMatrixDisplay(cm).plot()
-        plt.title('Confusion Matrix')
-        plt.savefig(f'confusionMatrix_fold_{fold + 1}.png')
-        mlflow.log_artifact(f'confusionMatrix_fold_{fold + 1}.png')
+        plt.title("Confusion Matrix")
+        plt.savefig(f"confusionMatrix_fold_{fold + 1}.png")
+        mlflow.log_artifact(f"confusionMatrix_fold_{fold + 1}.png")
 
         # ROC Curve
         fpr, tpr, thresholds = roc_curve(y_true, y_pred)
         roc_auc = auc(fpr, tpr)
         plt.figure()
-        plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        plt.plot(
+            fpr,
+            tpr,
+            color="darkorange",
+            lw=2,
+            label="ROC curve (area = %0.2f)" % roc_auc,
+        )
+        plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic (ROC)')
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate")
+        plt.title("Receiver Operating Characteristic (ROC)")
         plt.legend(loc="lower right")
-        plt.savefig(f'roc_curve_fold_{fold + 1}.png')
-        mlflow.log_artifact(f'roc_curve_fold_{fold + 1}.png')
+        plt.savefig(f"roc_curve_fold_{fold + 1}.png")
+        mlflow.log_artifact(f"roc_curve_fold_{fold + 1}.png")
 
 # Aggregate evaluation results
 avg_precision = np.mean(all_precisions)

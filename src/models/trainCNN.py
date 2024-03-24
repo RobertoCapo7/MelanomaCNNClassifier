@@ -3,16 +3,19 @@ import mlflow
 from codecarbon import OfflineEmissionsTracker
 from matplotlib import pyplot as plt
 import tensorflow as tf
-from sklearn.model_selection import KFold
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
 from tensorflow.keras.metrics import Precision, Recall, BinaryAccuracy
-from sklearn.metrics import classification_report, confusion_matrix, auc, roc_curve, ConfusionMatrixDisplay, \
-    RocCurveDisplay
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    auc,
+    roc_curve,
+    ConfusionMatrixDisplay,
+)
 import numpy as np
-import seaborn as sns
 
-gpus = tf.config.experimental.list_physical_devices('GPU')
+gpus = tf.config.experimental.list_physical_devices("GPU")
 for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
@@ -127,30 +130,31 @@ with mlflow.start_run() as run:
     mlflow.log_metric("Recall", round(re.result().numpy(), 2))
     mlflow.log_metric("Accuracy", round(acc.result().numpy(), 2))
 
-
     y_pred_binary = [1 if pred >= 0.5 else 0 for pred in y_pred]
     print(classification_report(y_true, y_pred_binary))
 
     # Confusion Matrix
     cm = confusion_matrix(y_true, np.round(y_pred))
     cm_display = ConfusionMatrixDisplay(cm).plot()
-    plt.title('Confusion Matrix')
-    plt.savefig('confusion_matrix.png')
-    mlflow.log_artifact('confusion_matrix.png')
+    plt.title("Confusion Matrix")
+    plt.savefig("confusion_matrix.png")
+    mlflow.log_artifact("confusion_matrix.png")
 
     # ROC Curve
     fpr, tpr, thresholds = roc_curve(y_true, y_pred)
     roc_auc = auc(fpr, tpr)
     plt.figure()
-    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
-    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.plot(
+        fpr, tpr, color="darkorange", lw=2, label="ROC curve (area = %0.2f)" % roc_auc
+    )
+    plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC)')
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver Operating Characteristic (ROC)")
     plt.legend(loc="lower right")
-    plt.savefig('roc_curve.png')
-    mlflow.log_artifact('roc_curve.png')
+    plt.savefig("roc_curve.png")
+    mlflow.log_artifact("roc_curve.png")
 
 tracker.stop()
